@@ -1,0 +1,16 @@
+
+.Carrito {
+    position: relative;
+    margin-right: 2rem;
+    width: 50px;
+}
+
+.Carrito h5 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    border-radius: 50%;
+    width: 1rem;
+    text-align: center;
+}

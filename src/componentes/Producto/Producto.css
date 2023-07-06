@@ -1,0 +1,9 @@
+.item {
+    background-color: blue;
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 4rem;
+}
