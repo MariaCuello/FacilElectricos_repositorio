@@ -1,14 +1,17 @@
-import "./Producto.css"
+import "./Producto.css";
+import {Link} from "react-router-dom";
 
 function Producto (props){
-    const {url, titulo, subtitulo, precio} = props;
+    const {id, imagen, nombre, precio} = props;
 
     return (
         <div className="item">
-            <img src={url} width="100px"></img>
-            <h1>{titulo}</h1>
-            <h3>{subtitulo}</h3>
+            <img src={imagen} width="100px"></img>
+            <h1>{nombre}</h1>
             <h3>{precio}</h3>
+            <Link to={`/producto/${id}`}>
+                <button>Ver mas</button>
+            </Link>
         </div>
     );
 }

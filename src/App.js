@@ -1,29 +1,23 @@
 import logo from './logo.svg';
 import Producto from "./componentes/Producto/Producto";
 import NavBar from "./componentes/NavBar/NavBar";
+import ProductoListContainer from './componentes/ProductoListContainer/ProductoListContainer';
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import ProductoDetailContainer from './componentes/ProductoDetailContainer/ProductoDetailContainer';
 
 
 function App() {
   return (
     <div className="App">
+      <BrowserRouter>
         <NavBar></NavBar>
-        <div className="contenedorProductos">
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        <Producto url="./assets/cocina.jpg" titulo="titulo" subtitulo="subtitulo" precio="precio"></Producto>
-        </div>
+        <Routes>
+          <Route path="/" element={<ProductoListContainer></ProductoListContainer>}></Route>
+          <Route path="/producto/:id" element={<ProductoDetailContainer></ProductoDetailContainer>}></Route>
+          <Route path="/categoria/:categoriaId" element={<ProductoListContainer></ProductoListContainer>}></Route> 
+        </Routes>
+        
+      </BrowserRouter>
     </div>
   );
 }
