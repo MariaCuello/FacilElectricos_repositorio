@@ -1,0 +1,15 @@
+
+
+.contenedorContador{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+.contenedorContador img {
+    margin: 0.5rem;
+    width: 20px;
+    height: 20px;        
+}

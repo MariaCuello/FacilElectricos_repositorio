@@ -1,3 +1,32 @@
+import { initializeApp } from "firebase/app";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  where,
+  query,
+  addDoc,
+  writeBatch
+} from "firebase/firestore";
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBvMzuHChWp98Gikc_i0S5wMNXCScTSLrA",
+    authDomain: "facilelectricos.firebaseapp.com",
+    projectId: "facilelectricos",
+    storageBucket: "facilelectricos.appspot.com",
+    messagingSenderId: "137247248703",
+    appId: "1:137247248703:web:76f31ad69d8d429bc3838a",
+    measurementId: "G-LQTFR0ES3Y"
+  };
+
+
+const appFirebase = initializeApp(firebaseConfig);
+
+const db = getFirestore(appFirebase);
+
 const electrodomesticos = 
 [
     {
@@ -181,29 +210,74 @@ const electrodomesticos =
       "oferta": true,
     }
   ];
-  
-  function getData() {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(electrodomesticos);
-        }, 2000);
-    })
-  }
 
-  export function getDataProducto(idURL) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(electrodomesticos.find ((producto) => producto.id === parseInt(idURL)));
-        }, 2000);
-    })
-  }
+async function getData() {
+  const productsRef = collection(db, "electrodomesticos");
+  const documentsSnapshot = await getDocs(productsRef);
+  const documents = documentsSnapshot.docs;
+  const docsData = documents.map(
+    (item) => {
+      return { ...item.data(), id: item.id };
+    }
+  );
+  return docsData;
+}
 
-  export function getDataOferta(oferta) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(electrodomesticos.filter ((producto) => producto.oferta === oferta));
-        }, 2000);
-    })
-  }
+async function getProductoData(id) {
+  const docRef = doc(db, "electrodomesticos", id);
+  const docSnapshot = await getDoc(docRef);
 
-  export default getData;
+  if (docSnapshot.exists()) {
+    return { ...docSnapshot.data(), id: docSnapshot.id };
+  } else {
+    throw new Error("Producto no encontrado");
+  }
+}
+
+async function getCategoriaData(oferta) {
+  const productsRef = collection(db, "electrodomesticos");
+  const q = query(productsRef, where("oferta", "==", oferta));
+  const documentsSnapshot = await getDocs(q);
+  const documents = documentsSnapshot.docs;
+
+  return documents.map((item) => ({ ...item.data(), id: item.id }));
+}
+
+async function crearOrden(data){
+  const collectionRef = collection(db, "ordenes")
+  const docCreated = await addDoc(collectionRef, data)
+
+  return(docCreated.id)
+}
+
+
+async function getOrden(id){
+  const docRef = doc(db, "ordenes", id);
+  const docSnapshot = await getDoc(docRef);
+
+  return { ...docSnapshot.data(), id: docSnapshot.id };
+}
+
+
+async function exportarElectrodomesticos(){ 
+  for(let item of electrodomesticos){   
+    const collectionRef = collection(db, "electrodomesticos")
+    const docCreated = await addDoc(collectionRef, item);
+  }
+}
+
+
+async function exportarElectrodomesticosBatch(){
+  const batch = writeBatch(db); 
+
+  electrodomesticos.forEach( producto => {
+    const newId = producto.id
+    delete producto.id;
+    const newDoc = doc(db, "electrodomesticos", newId.toString())
+    batch.set(newDoc, producto);    
+  })
+
+  const data = await batch.commit()  
+}
+
+export { getData, getOrden, getProductoData, getCategoriaData, crearOrden, exportarElectrodomesticos, exportarElectrodomesticosBatch};
